@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sergey Nesterov</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Calibri', 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 1000px;
+        }
+
+        .sidebar {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 30px;
+        }
+
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            font-weight: bold;
+            border: 1px solid #888;
+            overflow: hidden;
+        }
+
+        .sidebar h1 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .sidebar .job-title {
+            text-align: center;
+            font-size: 14px;
+            color: #bdc3c7;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-section h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #34495e;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-item {
+            margin-bottom: 12px;
+            font-size: 13px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .contact-item .icon {
+            min-width: 20px;
+        }
+
+        .contact-item a {
+            color: #3498db;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .skill-items {
+            display: flex;
+            flex-wrap: wrap;
+            column-gap: 5px;
+        }
+
+        .skill-name {
+            margin-bottom: 10px;
+            border: 1px solid #34495e;
+            background-color: #bdc3c7;
+            padding: 3px 7px;
+            border-radius: 16px;
+            display: flex;
+            justify-items: center;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .skill-major {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            font-size: 14px;
+            font-weight: 800;
+            padding: 3px 10px;
+        }
+
+        .language-item,
+        .hobby-item {
+            font-size: 13px;
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .language-item:before,
+        .hobby-item:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+        }
+
+        .main-content {
+            padding: 40px 40px 40px 30px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 7px;
+            border-bottom: 3px solid #3498db;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .objective-text {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #555;
+            text-align: justify;
+        }
+
+        .experience-item,
+        .education-item,
+        .project-item {
+            margin-bottom: 18px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .experience-item:before,
+        .education-item:before,
+        .project-item:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            background: #3498db;
+            border-radius: 50%;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 5px;
+            flex-wrap: wrap;
+        }
+
+        .item-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .item-date {
+            font-size: 13px;
+            color: #3498db;
+            font-weight: 500;
+        }
+
+        .item-subtitle {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+            font-style: italic;
+        }
+
+        .item-description {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .item-description ul {
+            margin-top: 8px;
+        }
+
+        .item-description li {
+            margin-bottom: 3px;
+        }
+
+        .item-skills {
+            display: flex;
+            flex-wrap: wrap;
+            column-gap: 3px;
+        }
+
+        .item-skill {
+            margin-bottom: 5px;
+            border: 1px solid #3498db;
+            padding: 1px 2px;
+            border-radius: 5px;
+            display: flex;
+            justify-items: center;
+            align-items: center;
+            font-size: 10px;
+        }
+
+        .certifications-list {
+            list-style: none;
+        }
+
+        .certifications-list li {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .certifications-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        @media print {
+            * {
+                color: black !important;
+                background: white !important;
+                background-color: white !important;
+                background-image: none !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+
+            .sidebar {
+                background: white !important;
+                color: black !important;
+            }
+
+            .main-content {
+                padding-left: 0 !important;
+            }
+
+            .sidebar h1,
+            .sidebar .job-title,
+            .sidebar-section h3,
+            .contact-item,
+            .language-item,
+            .hobby-item {
+                color: black !important;
+            }
+
+            .profile-photo {
+                background: white !important;
+                border: 2px solid black !important;
+                color: gray !important;
+            }
+
+            .skill-name {
+                margin-bottom: 0px !important;
+                border: none !important;
+                background: white !important;
+                color: black !important;
+            }
+
+            .skill-major {
+                background: white !important;
+                color: black !important;
+                border-bottom: 1px solid black !important;
+            }
+
+            .section-title {
+                color: black !important;
+                border-bottom: 2px solid black !important;
+            }
+
+            .item-title {
+                color: black !important;
+            }
+
+            .item-date {
+                color: black !important;
+            }
+
+            .contact-item a {
+                color: black !important;
+            }
+
+            .experience-item:before,
+            .education-item:before,
+            .project-item:before {
+                background: black !important;
+            }
+
+            .language-item:before,
+            .hobby-item:before {
+                color: black !important;
+            }
+
+            .certifications-list li:before {
+                color: black !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                padding: 30px 20px;
+            }
+
+            .main-content {
+                padding: 30px 20px;
+            }
+
+            .profile-photo {
+                width: 120px;
+                height: 120px;
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="profile-photo">
+                <img src="./photo.jpg" alt="Sergey Nesterov" style="width: 148px; height: 148px; border-radius: 50%;">
+            </div>
+            <h1>Sergey Nesterov</h1>
+            <div class="job-title">Full Stack Software Engineer</div>
+
+            <div class="sidebar-section">
+                <h3>Contact</h3>
+                <div class="contact-item">
+                    <span class="icon">📧</span>
+                    <span>snesterov@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📱</span>
+                    <span>+48 516 616 452</span>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📍</span>
+                    <span>Gdansk, Poland</span>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">🔗</span>
+                    <a href="https://linkedin.com/in/s-nesterov">linkedin.com/in/s-nesterov</a>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Skills</h3>
+                <div class="skill-items">
+                    <div class="skill-name skill-major">TypeScript</div>
+                    <div class="skill-name">JavaScript</div>
+                    <div class="skill-name skill-major">React</div>
+                    <div class="skill-name skill-major">React Native</div>
+                    <div class="skill-name skill-major">Angular</div>
+                    <div class="skill-name">Expo</div>
+                    <div class="skill-name skill-major">Next.js</div>
+                    <div class="skill-name skill-major">NestJs</div>
+                    <div class="skill-name">Docker</div>
+                    <div class="skill-name">Cordova</div>
+                    <div class="skill-name">Tailwind</div>
+                    <div class="skill-name">NativeWind</div>
+                    <div class="skill-name">Handlebars</div>
+                    <div class="skill-name">Backbone.js</div>
+                    <div class="skill-name skill-major">ORM</div>
+                    <div class="skill-name">Prisma</div>
+                    <div class="skill-name">Mongoose</div>
+                    <div class="skill-name">SQLite</div>
+                    <div class="skill-name">MongoDB</div>
+                    <div class="skill-name">PostgreSQL</div>
+                    <div class="skill-name">Java</div>
+                    <div class="skill-name">Swift</div>
+                    <div class="skill-name">Objective-C</div>
+                    <div class="skill-name">Jest</div>
+                    <div class="skill-name">Cypress</div>
+                    <div class="skill-name">React Testing Library</div>
+                    <div class="skill-name">Storybook</div>
+                    <div class="skill-name">Sentry</div>
+                    <div class="skill-name">Pendo</div>
+                    <div class="skill-name">Crypto.js</div>
+                    <div class="skill-name">PixiJS</div>
+                    <div class="skill-name">Spine</div>
+                    <div class="skill-name">Winston</div>
+                    <div class="skill-name">Grammy</div>
+                    <div class="skill-name">Telegram apps SDK</div>
+                    <div class="skill-name">Nodemailer</div>
+                    <div class="skill-name">Googleapis</div>
+                    <div class="skill-name">Quill</div>
+                    <div class="skill-name">Mailgun</div>
+                    <div class="skill-name">Zustand</div>
+                    <div class="skill-name">Redux</div>
+                    <div class="skill-name">RTK Query</div>
+                    <div class="skill-name">Axios</div>
+                    <div class="skill-name">REST API</div>
+                    <div class="skill-name">React Native reusables</div>
+                    <div class="skill-name">Zod</div>
+                    <div class="skill-name">TinyBase</div>
+                    <div class="skill-name">FSRS</div>
+                    <div class="skill-name">Rot.js</div>
+                    <div class="skill-name">Clerk</div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Languages</h3>
+                <div class="language-item">Russian - Native</div>
+                <div class="language-item">English - Intermediate</div>
+                <div class="language-item">Polish - Basic</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="section">
+                <h2 class="section-title">Summary</h2>
+                <p class="objective-text">Software engineer with deep knowledge of TypeScript, React, React Native,
+                    Angular, Next.js,
+                    NestJS, and ORM. Experienced in both large commercial companies and small freelance projects. Also
+                    has experience
+                    leading a small team. Possesses a broad range of technologies necessary for the development and
+                    deployment of small-
+                    to medium-scale applications.
+                </p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Experience</h2>
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div class="item-title">Software Engineer</div>
+                        <div class="item-date">Apr 2022 - Present</div>
+                    </div>
+                    <div class="item-subtitle">Intetics</div>
+                    <div class="item-description">
+                        <ul>
+                            <li>Participated in the development of a mobile client for the CRM system.</li>
+                            <li>Developed several Cordova plugins, including Caller ID, device jailbreak detection, and
+                                support for external authentication via a browser.</li>
+                            <li>Improved the build system, reducing development build time by approximately 10 times.
+                            </li>
+                            <li>Implemented Visual Regression Testing to optimize end-to-end testing using Cypress.</li>
+                            <li>Prototyped new functionality using React Native.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div class="item-title">Software Developer</div>
+                        <div class="item-date">Dec 2021 - Apr 2022</div>
+                    </div>
+                    <div class="item-subtitle">EPAM Systems</div>
+                    <div class="item-description">
+                        <ul>
+                            <li>Participated in the migration of an internal project from AngularJS to Angular.</li>
+                            <li>Developed a complex multi-step form with numerous interactive elements.</li>
+                            <li>Collaborated with 5-member development team using Agile/Scrum methodology</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div class="item-title">Software Developer</div>
+                        <div class="item-date">Sep 2020 - Present</div>
+                    </div>
+                    <div class="item-subtitle">Freelance</div>
+                    <div class="item-description">
+                        <ul>
+                            <li>Development of landing pages.</li>
+                            <li>Integration of websites with CRM systems.</li>
+                            <li>Integration with Google Maps and Google Docs APIs.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div class="item-title">Head of IT Department</div>
+                        <div class="item-date">Oct 2011 - Dec 2021</div>
+                    </div>
+                    <div class="item-subtitle">JSC «ALEVKURP»</div>
+                    <div class="item-description">
+                        <ul>
+                            <li>Managed a team of up to 4 people.</li>
+                            <li>EEnsured the uninterrupted operation of the organization’s information systems.</li>
+                            <li>Supported the implementation of electronic document management, ERP systems, IP
+                                telephony, and local Jira and GitLab servers.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Projects</h2>
+                <div class="project-item">
+                    <div class="item-header">
+                        <div class="item-title">Mobile client for the CRM system</div>
+                        <div class="item-date">Apr 2022 - Present</div>
+                    </div>
+                    <div class="item-description">
+                        <ul>
+                            <li>Built mobile client for CRM system with offline capabilities</li>
+                            <li>Utilized cordova for cross-platform development</li>
+                        </ul>
+                        <div class="item-skills">
+                            <div class="item-skill">TypeScript</div>
+                            <div class="item-skill">JavaScript</div>
+                            <div class="item-skill">React</div>
+                            <div class="item-skill">RTK Query</div>
+                            <div class="item-skill">Docker</div>
+                            <div class="item-skill">Cordova</div>
+                            <div class="item-skill">Handlebars</div>
+                            <div class="item-skill">Backbone.js</div>
+                            <div class="item-skill">SQLite</div>
+                            <div class="item-skill">Java</div>
+                            <div class="item-skill">Swift</div>
+                            <div class="item-skill">Objective-C</div>
+                            <div class="item-skill">Jest</div>
+                            <div class="item-skill">React Testing Library</div>
+                            <div class="item-skill">Cypress</div>
+                            <div class="item-skill">Storybook</div>
+                            <div class="item-skill">Sentry</div>
+                            <div class="item-skill">Pendo</div>
+                        </div>
+                    </div>
+                    </div>
+                    
+                    <div class="project-item">
+                        <div class="item-header">
+                            <div class="item-title">Telegrmm mini app</div>
+                            <div class="item-date">Aug 2025 - Nov 2025</div>
+                        </div>
+                    <div class="item-description">
+                        <ul>
+                            <li>Developed a Telegram-based game for football fans.</li>
+                            <li>Implemented features allowing players to level up their characters, complete daily
+                                quests, and purchase
+                                new players.
+                            </li>
+                            <li>Implemented authentication, session management, secure transmission of game statistics
+                                to the server,
+                                and user
+                                activity logging.</li>
+                        </ul>
+                        <div class="item-skills">
+                            <div class="item-skill">Next.js</div>
+                            <div class="item-skill">React</div>
+                            <div class="item-skill">Tailwind CSS</div>
+                            <div class="item-skill">Crypto.js</div>
+                            <div class="item-skill">PixiJS</div>
+                            <div class="item-skill">Spine</div>
+                            <div class="item-skill">Zustand</div>
+                            <div class="item-skill">Nest.js</div>
+                            <div class="item-skill">Prisma</div>
+                            <div class="item-skill">Grammy</div>
+                            <div class="item-skill">Winston</div>
+                            <div class="item-skill">Telegram apps SDK</div>
+                            <div class="item-skill">Jest</div>
+                            <div class="item-skill">PostgreSQL</div>
+                            <div class="item-skill">Docker</div>
+                        </div>
+                        </div>
+                        </div>
+                <div class="project-item">
+                    <div class="item-header">
+                        <div class="item-title">Landing page</div>
+                        <div class="item-date">Jul 2025 - Aug 2025</div>
+                    </div>
+                    <div class="item-description">
+                        <ul>
+                            <li>Developed a responsive landing page for an Austrian energy company.</li>
+                            <li>Developed a feature-rich landing page with a complex multi-step order form.</li>
+                            <li>Implemented integration with Google Maps API, Gmail API, and CRM systems.</li>
+                        </ul>
+                        <div class="item-skills">
+                            <div class="item-skill">Next.js</div>
+                            <div class="item-skill">React</div>
+                            <div class="item-skill">Tailwind CSS</div>
+                            <div class="item-skill">Nodemailer</div>
+                            <div class="item-skill">Googleapis</div>
+                            <div class="item-skill">Jest</div>
+                            <div class="item-skill">Docker</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-item">
+                    <div class="item-header">
+                        <div class="item-title">Mail dashboard</div>
+                        <div class="item-date">Jul 2025 - Aug 2025</div>
+                    </div>
+                    <div class="item-description">
+                        <ul>
+                            <li>Developed an application for scraping email addresses and managing email campaigns.</li>
+                            <li>Implemented support for two different scrapers, editing address lists, creating email
+                                templates, and managing email
+                                campaigns with detailed statistics display.</li>
+                            <li>Implemented authentication with user role assignment, mailing queues, and detailed
+                                statistics collection.</li>
+                        </ul>
+                        <div class="item-skills">
+                            <div class="item-skill">Next.js</div>
+                            <div class="item-skill">React</div>
+                            <div class="item-skill">Tailwind CSS</div>
+                            <div class="item-skill">Quill</div>
+                            <div class="item-skill">Axios</div>
+                            <div class="item-skill">NestJS</div>
+                            <div class="item-skill">Mailgun</div>
+                            <div class="item-skill">Winston</div>
+                            <div class="item-skill">Mongoose</div>
+                            <div class="item-skill">MongoDB</div>
+                            <div class="item-skill">Docker</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-item">
+                    <div class="item-header">
+                                <div class="item-title">A tool for calculating carbon footprint.</div>
+                                <div class="item-date">Dec 2021 - Apr 2022</div>
+                    </div>
+                    <div class="item-description">
+                        <ul>
+                            <li>Developed an application for calculating carbon footprint based on user input.</li>
+                            <li>Developed a complex multi-step form with state persistence across page reloads.</li>
+                            <li>Implemented state management using Redux with persistence in localStorage.</li>
+                            </ul>
+                            <div class="item-skills">
+                                <div class="item-skill">Angular</div>
+                                <div class="item-skill">Redux</div>
+                                <div class="item-skill">TypeScript</div>
+                                <div class="item-skill">REST API</div>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="item-header">
+                        <div class="item-title">Language learning application.</div>
+                        <div class="item-date">Sep 2025 - Nov 2025</div>
+                    </div>
+                    <div class="item-description">
+                        <ul>
+                            <li>Developed a cross-platform language learning application based on spaced repetition and gamification mechanics.</li>
+                            <li>Implemented flashcard-based repetition and a game mechanic inspired by ASCII roguelike games.</li>
+                            <li>Implemented user authentication and offline-first functionality based on TinyBase.</li>
+                            </ul>
+                            <div class="item-skills">
+                                <div class="item-skill">Expo</div>
+                                <div class="item-skill">React Native</div>
+                                <div class="item-skill">NativeWind</div>
+                                <div class="item-skill">React Native reusables</div>
+                                <div class="item-skill">TypeScript</div>
+                                <div class="item-skill">TinyBase</div>
+                                <div class="item-skill">FSRS</div>
+                                <div class="item-skill">Zod</div>
+                                <div class="item-skill">Zustand</div>
+                                <div class="item-skill">Rot.js</div>
+                                <div class="item-skill">Clerk</div>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                            
+                            <div class="section">
+                                <h2 class="section-title">Education</h2>
+                                <div class="education-item">
+                                    <div class="item-header">
+                                        <div class="item-title">Master’s degree in Radio Engineering and Informatics</div>
+                                        <div class="item-date">2002 - 2007</div>
+                                    </div>
+                                    <div class="item-subtitle">Belarusian State University of Informatics and Radioelectronics (BSUIR)
+                                    </div>
+                                    <div class="item-description">
+                                        <strong>GPA:</strong> 4.6/5.0<br>
+                                        <strong>Master’s thesis:</strong> Design of a GSM System for Railway Communication.
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="section">
+                <h2 class="section-title">Certifications</h2>
+                <ul class="certifications-list">
+                    <li>JavaScript/Front-end - The Rolling Scopes School (2020-2021)</li>
+                    <li>RSSchool nodejs - The Rolling Scopes School (2021)</li>
+                    <li>RSSchool React - The Rolling Scopes School (2021)</li>
+                    <li>RSSchool Angular - The Rolling Scopes School (2021)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
